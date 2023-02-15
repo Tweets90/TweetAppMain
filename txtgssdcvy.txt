@@ -1,0 +1,23 @@
+register
+http://localhost:9090/api/v1.0/tweets/register      (post)
+
+{
+    "id": 1,
+    "firstName": "harshit",
+    "lastName": "verma",
+    "email": "harshit@google.com",
+    "userName": "harshit",
+    "password": "harshit",
+    "contactNum": "9696986596"
+}
+
+
+
+
+
+http://localhost:9090/api/v1.0/tweets/login    (post)
+
+{
+    "username":"harshit@google.com",
+    "password":"harshit"
+}
