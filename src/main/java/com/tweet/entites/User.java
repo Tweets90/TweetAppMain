@@ -1,10 +1,8 @@
 package com.tweet.entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +14,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Getter
-@Setter
+@ToString
 public class User implements UserDetails {
 
     @Id
@@ -25,61 +22,35 @@ public class User implements UserDetails {
     private int id;
     private String firstName;
     private String lastName;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     //valid email
     private String email;
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     //alphanmeric character
     private String userName;
 
     @Column(nullable = false)
-    @JsonIgnore
+
     private String password;
+    //    @Column(nullable = false)
+//    private String conPassword;
     @Column(nullable = false)
-    @JsonIgnore
-    private String conPassword;
-    @Column(nullable = false)
-    private String coontactNum;
+    private String contactNum;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Post> posts=new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Post> posts = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user",referencedColumnName = "id")
-            ,inverseJoinColumns = @JoinColumn(name = "role",referencedColumnName = "id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
-
-    public void setfirstName(Object getfirstName) {
-    }
-
-    public void setuserName(Object getuserName) {
-    }
-
-    public void setlastName(Object getlastName) {
-    }
-
-    public void setemail(Object getemail) {
-    }
-
-    public void setpassword(Object getpassword) {
-    }
-
-    public void setconpassword(Object getconpassword) {
-    }
-
-    public void setcontactNum(Object getcontactNum) {
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       List<SimpleGrantedAuthority> authorities= this.roles.stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> authorities = this.roles.stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return authorities;
     }
 
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -99,5 +70,82 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getContactNum() {
+        return contactNum;
+    }
+
+    public void setContactNum(String contactNum) {
+        this.contactNum = contactNum;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

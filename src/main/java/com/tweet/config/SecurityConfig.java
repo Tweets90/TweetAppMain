@@ -7,6 +7,7 @@ import com.tweet.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -30,7 +31,9 @@ public class SecurityConfig {
             "/authentication/forget-password",
             "/authentication/send-otp/{email}",
             "/authentication/update-forget-password",
-			"/authentication/get-user-data/{email}"
+			"/authentication/get-user-data/{email}",
+           "/api/v1.0/tweets/**",
+
 
     };
 
@@ -50,6 +53,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers(PUBLIC_URL).permitAll()
+                .antMatchers(HttpMethod.GET).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

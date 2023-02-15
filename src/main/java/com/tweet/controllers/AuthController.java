@@ -2,7 +2,9 @@ package com.tweet.controllers;
 
 import com.tweet.payloads.JwtAuthRequest;
 import com.tweet.payloads.JwtAuthResponse;
+import com.tweet.payloads.UserDto;
 import com.tweet.security.JwtTokenHelper;
+import com.tweet.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1.0/tweets/")
@@ -26,7 +25,8 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
+@Autowired
+private UserService userService;
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) throws Exception {
 
@@ -35,7 +35,7 @@ public class AuthController {
        String token= this.jwtTokenHelper.generateToken(userDetails);
        JwtAuthResponse response = new JwtAuthResponse();
        response.setToken(token);
-       return new ResponseEntity<>(response, HttpStatus.OK);
+       return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
 
 
     }
@@ -54,9 +54,13 @@ public class AuthController {
                 throw new Exception("Invalid username and Password !!");
 
             }
-
-
-
+    }
+    //register new user api
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+//        System.out.println("userdto here"+userDto.getUserName());
+        UserDto registeredUser=this.userService.registerNewUser(userDto);
+  return new ResponseEntity<UserDto>(registeredUser,HttpStatus.CREATED);
     }
 
 }
